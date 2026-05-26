@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from model import ComplaintForm, COMPLAINT_SOURCES, COMPLAINT_CATEGORIES
 from model import ROOT_CAUSE_CATEGORIES, REGULATORY_STATUSES, FREQUENCIES
-from model import INVESTIGATION_METHODS, YES_NO_UNKNOWN, YES_NO
+from model import INVESTIGATION_METHODS, YES_NO_UNKNOWN, YES_NO, LANGUAGES, SIGNATURE_ROLES
 
 OUTPUT_DIR = Path(__file__).resolve().parent.parent / "output"
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -41,7 +41,7 @@ def prompt_str(label: str, default: str = "", required: bool = False) -> str:
         if not val and default:
             return default
         if not val and required:
-            print("  ⚠ 此字段必填")
+            print("  [!] 此字段必填")
             continue
         return val
 
@@ -120,6 +120,7 @@ SECTION_LABELS = {
     "F": "纠正措施",
     "G": "风险评估",
     "H": "监管报告",
+    "I": "电子签名",
 }
 
 
@@ -203,6 +204,21 @@ def input_section_h(form: ComplaintForm):
     form.regulatory_status = prompt_enum("报告状态", REGULATORY_STATUSES, form.regulatory_status)
 
 
+def input_section_i(form: ComplaintForm):
+    print(f"\n{'='*50}")
+    print(f"  I. 电子签名")
+    print(f"{'='*50}")
+    print("  (可选，可直接回车跳过)")
+    form.investigator_signature = prompt_str("调查人签名", form.investigator_signature)
+    form.investigator_sign_date = prompt_date("调查人签名日期", form.investigator_sign_date)
+    form.reviewer_name = prompt_str("审核人姓名", form.reviewer_name)
+    form.reviewer_signature = prompt_str("审核人签名", form.reviewer_signature)
+    form.reviewer_sign_date = prompt_date("审核人签名日期", form.reviewer_sign_date)
+    form.approver_name = prompt_str("批准人姓名", form.approver_name)
+    form.approver_signature = prompt_str("批准人签名", form.approver_signature)
+    form.approver_sign_date = prompt_date("批准人签名日期", form.approver_sign_date)
+
+
 # ── 预览 ───────────────────────────────────────────────
 
 def show_preview(form: ComplaintForm):
@@ -257,10 +273,15 @@ def show_preview(form: ComplaintForm):
             ("需要报告监管机构", form.regulatory_reportable),
             ("报告状态", form.regulatory_status),
         ]),
+        ("I. 电子签名", [
+            ("调查人签名", form.investigator_signature),
+            ("审核人", form.reviewer_name),
+            ("批准人", form.approver_name),
+        ]),
     ]
 
     print(f"\n{'='*60}")
-    print("  📋 客诉单预览")
+    print("  [预览] 客诉单预览")
     print(f"{'='*60}")
 
     for sec_title, fields in sections:
@@ -270,7 +291,12 @@ def show_preview(form: ComplaintForm):
             print(f"  │ {label:　<12}: {v}")
 
     if form.rpn is not None:
-        print(f"\n  ⚠  RPN = {form.rpn}")
+        print(f"\n  [!] RPN = {form.rpn}")
+
+    if form.is_high_risk:
+        print(f"\n  [!] [!] [!] 高风险投诉，请优先处理！")
+
+    print(f"\n  版本: v{form.version}  |  语言: {'中文' if form.language == 'zh' else 'English'}")
 
 
 # ── JSON 写入 + PDF 生成 ──────────────────────────────
@@ -292,10 +318,10 @@ def generate_pdf(json_path: Path) -> Path:
         capture_output=True, text=True, cwd=SCRIPT_DIR.parent,
     )
     if result.returncode != 0:
-        print("  ❌ PDF 生成失败:")
+        print("  [错误] PDF 生成失败:")
         print(result.stderr)
         sys.exit(1)
-    print(f"  ✅ {result.stdout.strip()}")
+    print(f"  [完成] {result.stdout.strip()}")
     return pdf_path
 
 
@@ -309,6 +335,9 @@ def cmd_new(json_input: str | None = None):
             data = json.load(f)
         form = ComplaintForm.from_dict(data)
         print("已加载外部数据，可在此基础上修改。")
+    else:
+        # 自动生成不冲突的编号
+        form.complaint_id = ComplaintForm.generate_next_id(OUTPUT_DIR)
 
     print(f"\n{'='*50}")
     print("  医疗器械客诉单 — 交互式创建")
@@ -324,12 +353,19 @@ def cmd_new(json_input: str | None = None):
         input_section_f(form)
         input_section_g(form)
         input_section_h(form)
+        input_section_i(form)
 
         show_preview(form)
 
         print(f"\n  {'─'*50}")
         cmd = input("  [c]确认生成  [r]重新填写  [q]取消: ").strip().lower()
         if cmd == "c":
+            # 如果从 JSON 加载且已有版本号，自动递增
+            if json_input and form.version:
+                change_reason = input("  变更说明（可选）: ").strip()
+                form.version += 1
+                if change_reason:
+                    form.change_log.append(f"v{form.version}: {change_reason}")
             break
         elif cmd == "q":
             print("已取消")
@@ -342,7 +378,7 @@ def cmd_new(json_input: str | None = None):
     print(f"\n  数据已保存: {json_path}")
 
     pdf_path = generate_pdf(json_path)
-    print(f"  ✅ 客诉单已生成: {pdf_path}")
+    print(f"  [完成] 客诉单已生成: {pdf_path}")
 
 
 # ── 入口 ───────────────────────────────────────────────

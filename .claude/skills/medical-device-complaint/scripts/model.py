@@ -3,8 +3,10 @@
 Medical Device Complaint Form - Data Model
 """
 
-from dataclasses import dataclass, asdict
+import re
+from dataclasses import dataclass, asdict, field, MISSING
 from datetime import date
+from pathlib import Path
 from typing import Optional
 
 
@@ -18,6 +20,15 @@ FREQUENCIES = ["单次", "偶发", "经常", "持续"]
 INVESTIGATION_METHODS = ["现场调查", "实验室分析", "文件审查", "回访客户", "其他"]
 YES_NO_UNKNOWN = ["是", "否", "未知"]
 YES_NO = ["是", "否"]
+LANGUAGES = ["zh", "en"]
+RISK_LEVELS = ["低", "中", "高", "紧急"]
+
+# 签批角色
+SIGNATURE_ROLES = [
+    {"key": "investigator", "label_zh": "调查人", "label_en": "Investigator"},
+    {"key": "reviewer", "label_zh": "审核人", "label_en": "Reviewer"},
+    {"key": "approver", "label_zh": "批准人", "label_en": "Approver"},
+]
 
 
 # ── 主数据模型 ────────────────────────────────────────
@@ -74,9 +85,27 @@ class ComplaintForm:
     regulatory_reportable: str = "否"
     regulatory_status: str = "不适用"
 
+    # ── I. 电子签名 ──
+    investigator_signature: str = ""
+    investigator_sign_date: str = ""
+    reviewer_name: str = ""
+    reviewer_signature: str = ""
+    reviewer_sign_date: str = ""
+    approver_name: str = ""
+    approver_signature: str = ""
+    approver_sign_date: str = ""
+
+    # ── 语言 ──
+    language: str = "zh"
+
+    # ── 版本控制 ──
+    version: int = 1
+    change_log: list[str] = field(default_factory=list)
+
     def __post_init__(self):
         """自动填充默认值。"""
         today_iso = date.today().isoformat()
+        today_ymd = date.today().strftime("%Y%m%d")
 
         if not self.received_date:
             self.received_date = today_iso
@@ -86,9 +115,9 @@ class ComplaintForm:
             self.investigation_date = today_iso
 
         if not self.complaint_id:
-            self.complaint_id = f"COMP-{date.today().strftime('%Y%m%d')}-001"
+            self.complaint_id = f"COMP-{today_ymd}-001"
 
-    # ── 派生属性 ──
+    # ── 风险评估派生 ──
 
     @property
     def rpn(self) -> Optional[int]:
@@ -96,6 +125,52 @@ class ComplaintForm:
         if self.severity is not None and self.occurrence is not None and self.detection is not None:
             return self.severity * self.occurrence * self.detection
         return None
+
+    @property
+    def risk_level(self) -> str:
+        """风险等级。"""
+        s = self.severity or 1
+        o = self.occurrence or 1
+        risk = s * o
+        if risk <= 4:
+            return "低"
+        elif risk <= 9:
+            return "中"
+        elif risk <= 16:
+            return "高"
+        return "紧急"
+
+    @property
+    def is_high_risk(self) -> bool:
+        """是否为高风险投诉。"""
+        if self.patient_harm == "是":
+            return True
+        if self.severity is not None and self.severity >= 4:
+            return True
+        if self.occurrence is not None and self.occurrence >= 4 and self.severity is not None and self.severity >= 3:
+            return True
+        return False
+
+    # ── 编号生成 ──
+
+    @classmethod
+    def generate_next_id(cls, output_dir: str | Path = "output") -> str:
+        """扫描 output 目录，生成下一个可用的客诉编号。"""
+        output_path = Path(output_dir)
+        today_ymd = date.today().strftime("%Y%m%d")
+        prefix = f"COMP-{today_ymd}-"
+        max_num = 0
+
+        if output_path.exists():
+            for f in output_path.iterdir():
+                if f.suffix in (".json", ".pdf") and f.stem.startswith(prefix):
+                    # 匹配 COMP-YYYYMMDD-NNN 或 COMP-YYYYMMDD-NNN_vN
+                    match = re.match(rf"^{re.escape(prefix)}(\d+)(?:_v\d+)?$", f.stem)
+                    if match:
+                        num = int(match.group(1))
+                        max_num = max(max_num, num)
+
+        return f"{prefix}{max_num + 1:03d}"
 
     # ── 序列化 ──
 
@@ -117,17 +192,22 @@ class ComplaintForm:
         for k, field_def in field_types.items():
             if k in data and data[k] is not None:
                 raw = data[k]
-                # Handle None for Optional fields
                 if raw is None or (isinstance(raw, str) and raw.strip() == ""):
-                    if hasattr(field_def, "default") and field_def.default is not None:
-                        cleaned[k] = field_def.default
-                    else:
-                        cleaned[k] = "" if field_def.type == "str" else None
+                    cleaned[k] = cls._get_default(field_def)
                 else:
                     cleaned[k] = raw
             else:
-                cleaned[k] = field_def.default
+                cleaned[k] = cls._get_default(field_def)
         return cls(**cleaned)
+
+    @staticmethod
+    def _get_default(field_def) -> object:
+        """获取字段的默认值（支持 default_factory）。"""
+        if field_def.default is not MISSING:
+            return field_def.default
+        if field_def.default_factory is not MISSING:
+            return field_def.default_factory()
+        return ""
 
     @classmethod
     def get_field_meta(cls) -> list[dict]:
@@ -173,18 +253,22 @@ class ComplaintForm:
             # H
             {"key": "regulatory_reportable","section":"H","label":"需要报告监管机构","type":"enum", "required": False, "options": YES_NO},
             {"key": "regulatory_status",   "section":"H","label":"报告状态",       "type":"enum",   "required": False, "options": REGULATORY_STATUSES},
+            # I
+            {"key": "language",            "section": "I", "label": "语言",         "type": "enum",   "required": False, "options": LANGUAGES},
+            {"key": "version",             "section": "I", "label": "版本号",       "type": "integer","required": False},
         ]
 
     @classmethod
     def get_sections(cls) -> list[dict]:
         """获取分区定义。"""
         return [
-            {"letter": "A", "title": "投诉基本信息"},
-            {"letter": "B", "title": "投诉人信息"},
-            {"letter": "C", "title": "产品信息"},
-            {"letter": "D", "title": "投诉内容"},
-            {"letter": "E", "title": "研发调查"},
-            {"letter": "F", "title": "纠正措施"},
-            {"letter": "G", "title": "风险评估"},
-            {"letter": "H", "title": "监管报告"},
+            {"letter": "A", "title_zh": "投诉基本信息", "title_en": "Complaint Information"},
+            {"letter": "B", "title_zh": "投诉人信息",   "title_en": "Reporter Information"},
+            {"letter": "C", "title_zh": "产品信息",     "title_en": "Product Information"},
+            {"letter": "D", "title_zh": "投诉内容",     "title_en": "Complaint Details"},
+            {"letter": "E", "title_zh": "研发调查",     "title_en": "Investigation"},
+            {"letter": "F", "title_zh": "纠正措施",     "title_en": "Corrective Actions"},
+            {"letter": "G", "title_zh": "风险评估",     "title_en": "Risk Assessment"},
+            {"letter": "H", "title_zh": "监管报告",     "title_en": "Regulatory Reporting"},
+            {"letter": "I", "title_zh": "电子签名",     "title_en": "Electronic Signatures"},
         ]
