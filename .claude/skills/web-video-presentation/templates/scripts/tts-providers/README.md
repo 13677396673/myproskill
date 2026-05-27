@@ -38,8 +38,10 @@ npm run synthesize-audio -- --force
 |---|---|---|---|
 | `minimax.sh` | MiniMax `mmx` CLI | `mmx auth login --api-key` | **默认**；中文口播质量稳 |
 | `openai.sh` | OpenAI Audio Speech API | `OPENAI_API_KEY` env var | curl-based；多数 agent 已有 key |
+| `mimo.sh` | 小米 MiMo-V2.5-TTS | `MIMO_API_KEY` env var | chat-completions 接口，base64 回包；中文音色丰富，免费试用 |
+| `mimo-voiceclone.sh` | 小米 MiMo-V2.5-TTS VoiceClone | `MIMO_API_KEY` env var | 音色克隆；需参考音频；与 `mimo` 同 API key 但请求体不同 |
 
-只内置这两个 —— 我们不替你做更多技术选型。其它后端的代码片段在下面，
+只内置这四个 —— 我们不替你做更多技术选型。其它后端的代码片段在下面，
 复制到 `tts-providers/<name>.sh` 即可启用。
 
 ---

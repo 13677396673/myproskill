@@ -10,12 +10,14 @@ Auto 模式会自动按 step 播放并自动推进——录屏可以一镜到底
 > 这个老问题。
 
 合成器是 **provider-agnostic** 的：runner 本身不绑定任何 TTS 后端，每个
-后端是 `scripts/tts-providers/<name>.sh` 一个文件。**内置 2 个 provider**：
+后端是 `scripts/tts-providers/<name>.sh` 一个文件。**内置 4 个 provider**：
 
 | Provider | 默认 | 何时用 |
 |---|---|---|
 | `minimax` | ✓ | 中文口播首选（用 `mmx-cli`，要 MiniMax API key） |
 | `openai`  | —— | 多数 agent 已有 `OPENAI_API_KEY`；curl-based、响应快 |
+| `mimo`    | —— | 小米 MiMo-V2.5-TTS；chat-completions 接口，base64 回包；中文音色丰富，免费试用 |
+| `mimo-voiceclone` | —— | 小米 MiMo-V2.5-TTS 音色克隆；需参考音频样本，与 `mimo` 同 API key |
 
 换 / 加 provider 见
 [`scripts/tts-providers/README.md`](../templates/scripts/tts-providers/README.md)
@@ -78,8 +80,10 @@ ls scripts/tts-providers/    # 看本项目带了哪些
 
 - 用默认 `minimax` → 走 [2.A](#2a-用内置-minimax-合成)
 - 用内置 `openai` → 走 [2.B](#2b-用内置-openai-合成)
-- 想用别的 TTS / 自带 TTS → 走 [2.C](#2c-换-provider--加自定义-provider)
-- 一个都没装好 → 走 [2.D](#2d-退化路径)
+- 用内置 `mimo`（基础 TTS）→ 走 [2.C](#2c-用内置-mimo-合成基础-tts)
+- 用内置 `mimo-voiceclone`（音色克隆）→ 走 [2.C.i](#2ci-用内置-mimo-voiceclone-合成音色克隆)
+- 想用别的 TTS / 自带 TTS → 走 [2.D](#2d-换-provider--加自定义-provider)
+- 一个都没装好 → 走 [2.E](#2e-退化路径)
 
 #### 2.A 用内置 minimax 合成
 
@@ -125,7 +129,73 @@ OPENAI_TTS_MODEL=tts-1-hd PRESENTATION_TTS=openai \
 
 `tts_check` 会检查 curl / jq / `OPENAI_API_KEY` 三件套，缺哪个报哪个。
 
-#### 2.C 换 provider / 加自定义 provider
+#### 2.C 用内置 MiMo 合成（基础 TTS）
+
+```bash
+export MIMO_API_KEY=mimo_xxx...                         # 在 platform.xiaomimimo.com 获取
+PRESENTATION_TTS=mimo npm run synthesize-audio
+# 换音色
+PRESENTATION_TTS=mimo npm run synthesize-audio -- --voice=冰糖
+```
+
+可选 env：
+
+| 变量 | 默认 | 作用 |
+|---|---|---|
+| `MIMO_API_KEY` | —— **必须** | API key（从 platform.xiaomimimo.com 获取） |
+| `MIMO_BASE_URL` | `https://api.xiaomimimo.com/v1` | 可选，中国区 token-plan 用户可换成 `https://token-plan-cn.xiaomimimo.com/v1` |
+| `--voice=` / `PRESENTATION_TTS_VOICE` | `mimo_default` | 预置音色：`冰糖`、`茉莉`、`苏打`、`白桦`、`Mia`、`Chloe` |
+
+`tts_check` 会检查 curl / jq / base64 / `MIMO_API_KEY` 四件套，缺哪个报哪个。
+
+> **MiMo 特殊之处**：它走 OpenAI 兼容的 chat completions 端点而非专用 TTS API，
+> 响应体是 JSON（base64 编码的音频在 `choices[0].message.audio.data`），
+> 并非直接返回音频流。`mimo.sh` 内部通过 `curl | jq | base64 -d` 管道
+> 自动处理解码，对用户透明。
+
+#### 2.C.i 用内置 MiMo VoiceClone 合成（音色克隆）
+
+VoiceClone 用一段参考音频样本克隆音色，而不是从预置音色列表里选。
+
+先准备样本文件：
+
+```bash
+mkdir -p audio-samples
+# 把参考音频放进去（.mp3 或 .wav）
+# 目录结构：
+#   audio-samples/
+#   ├── my-voice.mp3
+#   └── narrator-female.wav
+```
+
+合成：
+
+```bash
+export MIMO_API_KEY=mimo_xxx...
+# 使用 audio-samples/my-voice.mp3 作为参考音色
+PRESENTATION_TTS=mimo-voiceclone npm run synthesize-audio -- --voice=my-voice
+# 换一个样本
+PRESENTATION_TTS=mimo-voiceclone npm run synthesize-audio -- --voice=narrator-female
+```
+
+可选 env：
+
+| 变量 | 默认 | 作用 |
+|---|---|---|
+| `MIMO_API_KEY` | —— **必须** | API key（与基础 MiMo 共用） |
+| `MIMO_BASE_URL` | `https://api.xiaomimimo.com/v1` | 可选 |
+| `MIMO_SAMPLE_DIR` | `audio-samples/` | 参考音频目录路径 |
+| `--voice=` / `PRESENTATION_TTS_VOICE` | `default-sample` | 样本文件名（不含扩展名） |
+
+`tts_check` 会检查 curl / jq / base64 / `MIMO_API_KEY` 四件套。
+
+> **VoiceClone 特殊之处**：它在请求体里用 `input_audio` 字段（base64 编码的
+> 参考音频），而不是 `voice` 字段。`--voice` 参数在 VoiceClone 中的语义是
+> "在 `MIMO_SAMPLE_DIR` 里找哪个样本文件"，而非选择预置音色。
+> 参考音频建议 5~30 秒，单人声、无背景噪音，格式 mp3 或 wav。单文件上限
+> 10MB。
+
+#### 2.D 换 provider / 加自定义 provider
 
 内置之外的常见后端在 `scripts/tts-providers/README.md` 里有 5 段
 **可粘贴**代码片段（ElevenLabs / edge-tts / macOS `say` / Azure / Google
@@ -151,9 +221,9 @@ npm run synthesize-audio -- --provider=edge-tts
 抄 `openai.sh`（HTTP-based）或 `minimax.sh`（CLI-based）起手最快。
 详细规范在 `scripts/tts-providers/README.md`。
 
-#### 2.D 退化路径
+#### 2.E 退化路径
 
-如果两个内置 provider 都没就绪（没装 mmx 也没有 OpenAI key）告诉用户：
+如果所有内置 provider 都没就绪（没装 mmx / 没有 OpenAI key / 没有 MiMo key）告诉用户：
 
 ```
 我可以：
@@ -162,11 +232,16 @@ npm run synthesize-audio -- --provider=edge-tts
      export OPENAI_API_KEY=sk-...
      PRESENTATION_TTS=openai npm run synthesize-audio
 
-  2. 帮你装 MiniMax CLI（默认 provider，中文音色更稳）
+  2. 用内置 MiMo provider（如果你有小米 MiMo API key）
+     基础 TTS:  PRESENTATION_TTS=mimo npm run synthesize-audio
+     音色克隆:  PRESENTATION_TTS=mimo-voiceclone npm run synthesize-audio -- --voice=样本名
+     API key 在 https://platform.xiaomimimo.com 获取
+
+  3. 帮你装 MiniMax CLI（默认 provider，中文音色更稳）
      npm install -g mmx-cli && mmx auth login --api-key sk-xxxxx
      API key 在 https://platform.minimaxi.com 获取
 
-  3. 换其它 provider
+  4. 换其它 provider
      scripts/tts-providers/README.md 里有 5 种现成代码片段：
        • ElevenLabs  (要 ELEVENLABS_API_KEY，英文音色最佳)
        • edge-tts    (免费 / 无 key / pip install edge-tts)
@@ -176,7 +251,7 @@ npm run synthesize-audio -- --provider=edge-tts
      复制一段保存成 tts-providers/<name>.sh，
      再 PRESENTATION_TTS=<name> npm run synthesize-audio
 
-  4. 暂时跳过
+  5. 暂时跳过
      稿子和 narrations 都在，你自己用任意 TTS 录制即可——文件
      按 audio-segments.json 的 audio 字段命名就行。
 ```
@@ -256,7 +331,25 @@ openai 专属：
 | 全部段 FAILED + key 是对的 | 多半 model / voice 名字错。`--voice=alloy` 试默认值；`OPENAI_TTS_MODEL=tts-1` 试默认模型；用 `bash -x scripts/synthesize-audio.sh` 看请求体 |
 | 走代理 / 走 Azure-OpenAI | `export OPENAI_BASE_URL=https://your-proxy/v1` |
 | HD 太慢 | 改成 `OPENAI_TTS_MODEL=tts-1`（默认）；HD 大约慢 2 倍 |
-| 中文音色不像真人 | OpenAI 6 种音色都是英语偏向；中文角色用 `minimax` 更合适 |
+| 中文音色不像真人 | OpenAI 6 种音色都是英语偏向；中文角色用 `minimax` 或 `mimo` 更合适 |
+
+mimo 专属：
+
+| 现象 | 原因 / 修法 |
+|---|---|
+| `MIMO_API_KEY is not set` | `export MIMO_API_KEY=...`，key 在 https://platform.xiaomimimo.com 获取 |
+| 全部段 FAILED + key 是对的 | 检查 `MIMO_BASE_URL` 是否正确（中国区 token-plan 用 `https://token-plan-cn.xiaomimimo.com/v1`）；用 `bash -x scripts/synthesize-audio.sh` 看响应体 |
+| `base64: invalid input` | API 返回了非 JSON 响应（多半网络问题或 key 无效）。`bash -x` 看原始响应 |
+| 合成的 mp3 是空文件或损坏 | 同上 —— `jq` 可能没找到 `choices[0].message.audio.data`，`base64` 解码了 "null" 字符串。检查 API key 和响应结构 |
+
+mimo-voiceclone 专属：
+
+| 现象 | 原因 / 修法 |
+|---|---|
+| `voice sample not found: ...` | 在 `MIMO_SAMPLE_DIR`（默认 `audio-samples/`）里没找到 `--voice` 指定文件。确认文件名正确，且格式为 `.mp3` 或 `.wav` |
+| `failed to base64-encode sample` | 样本文件存在但读取失败。检查文件权限和路径 |
+| 合成结果声音不对（不是样本音色） | 参考音频质量差。建议 5~30 秒干净人声，无背景噪音，单声道为佳 |
+| 全部段 FAILED + 样本文件存在 | 可能参考音频超 10MB 上限。用 `ffprobe` 或 `ls -lh` 检查文件大小 |
 
 换其它（自定义）provider 之后：
 
