@@ -38,8 +38,10 @@ tts_install_help() {
   cat <<'EOF' >&2
 To use the MiMo-V2.5-TTS provider:
 
-  Set your API key: export MIMO_API_KEY=...
-                     (get one at https://platform.xiaomimimo.com)
+  1. Set your API key — two ways:
+       export MIMO_API_KEY=...               # via env var
+       echo "MIMO_API_KEY=..." >> .env        # or via .env in presentation/
+     (get one at https://platform.xiaomimimo.com)
 
   Optional:          export MIMO_BASE_URL=https://token-plan-cn.xiaomimimo.com/v1
 

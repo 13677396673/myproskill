@@ -108,6 +108,10 @@ npm run synthesize-audio -- --voice=<voice-id>  # 指定音色
 合成串行（避免 rate limit），**自动跳过已存在文件**（断点续合，不烧
 重复 token）。
 
+> **API key 配置方式**：除了 `export MIMO_API_KEY=...`，还可以在项目根目录
+> 创建 `.env` 文件写入 `MIMO_API_KEY=xxx`，runner 会自动加载。`.env` 对
+> 所有 provider 都生效（`OPENAI_API_KEY` 等也可写进去）。
+
 #### 2.B 用内置 openai 合成
 
 ```bash
@@ -130,6 +134,9 @@ OPENAI_TTS_MODEL=tts-1-hd PRESENTATION_TTS=openai \
 `tts_check` 会检查 curl / jq / `OPENAI_API_KEY` 三件套，缺哪个报哪个。
 
 #### 2.C 用内置 MiMo 合成（基础 TTS）
+
+API key 也可以写在项目根目录的 `.env` 文件里（`MIMO_API_KEY=mimo_xxx...`），
+runner 会自动加载。
 
 ```bash
 export MIMO_API_KEY=mimo_xxx...                         # 在 platform.xiaomimimo.com 获取
@@ -156,6 +163,7 @@ PRESENTATION_TTS=mimo npm run synthesize-audio -- --voice=冰糖
 #### 2.C.i 用内置 MiMo VoiceClone 合成（音色克隆）
 
 VoiceClone 用一段参考音频样本克隆音色，而不是从预置音色列表里选。
+API key 同样支持 `.env` 文件（`MIMO_API_KEY=mimo_xxx...`）。
 
 先准备样本文件：
 
@@ -346,7 +354,7 @@ mimo-voiceclone 专属：
 
 | 现象 | 原因 / 修法 |
 |---|---|
-| `voice sample not found: ...` | 在 `MIMO_SAMPLE_DIR`（默认 `audio-samples/`）里没找到 `--voice` 指定文件。确认文件名正确，且格式为 `.mp3` 或 `.wav` |
+| `voice sample not found: ...` | 在 `MIMO_SAMPLE_DIR`（默认 `audio-samples/`）里没找到 `--voice` 指定文件。确认文件名正确，且格式为 `.m4a` / `.mp3` / `.wav` |
 | `failed to base64-encode sample` | 样本文件存在但读取失败。检查文件权限和路径 |
 | 合成结果声音不对（不是样本音色） | 参考音频质量差。建议 5~30 秒干净人声，无背景噪音，单声道为佳 |
 | 全部段 FAILED + 样本文件存在 | 可能参考音频超 10MB 上限。用 `ffprobe` 或 `ls -lh` 检查文件大小 |

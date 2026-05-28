@@ -13,7 +13,7 @@
 # must be placed in MIMO_SAMPLE_DIR and is referenced by --voice=<name>
 # or PRESENTATION_TTS_VOICE=<name> (without extension).
 #
-# Sample files searched: <voice>.mp3 → <voice>.wav
+# Sample files searched: <voice>.m4a → <voice>.mp3 → <voice>.wav
 # Default voice name:    default-sample
 #
 # Example setup:
@@ -46,10 +46,12 @@ tts_install_help() {
   cat <<'EOF' >&2
 To use the MiMo-V2.5-TTS-VoiceClone provider:
 
-  1. Set your API key:  export MIMO_API_KEY=...
-                         (get one at https://platform.xiaomimimo.com)
+  1. Set your API key — two ways:
+       export MIMO_API_KEY=...               # via env var
+       echo "MIMO_API_KEY=..." >> .env        # or via .env in presentation/
+     (get one at https://platform.xiaomimimo.com)
 
-  2. Prepare sample audio: place .mp3 or .wav files in audio-samples/
+  2. Prepare sample audio: place .m4a, .mp3 or .wav files in audio-samples/
      (or set MIMO_SAMPLE_DIR to a custom path).
 
   3. Run synthesis, referencing the sample by name:
@@ -79,10 +81,11 @@ tts_synthesize() {
   local sample_dir="${MIMO_SAMPLE_DIR:-audio-samples}"
 
   # ── Resolve the reference audio file ──────────────────────────────
-  local sample_file="$sample_dir/$voice.mp3"
+  local sample_file="$sample_dir/$voice.m4a"
+  [[ -f "$sample_file" ]] || sample_file="$sample_dir/$voice.mp3"
   [[ -f "$sample_file" ]] || sample_file="$sample_dir/$voice.wav"
   if [[ ! -f "$sample_file" ]]; then
-    echo "✗ voice sample not found: $sample_dir/$voice.{mp3,wav}" >&2
+    echo "✗ voice sample not found: $sample_dir/$voice.{m4a,mp3,wav}" >&2
     return 1
   fi
 

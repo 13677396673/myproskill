@@ -66,6 +66,13 @@ done
 
 PROVIDER_FILE="$PROVIDERS_DIR/$PROVIDER.sh"
 
+# ── Load .env if present (API keys, etc.) ─────────────────────────────
+if [[ -f "$ROOT/.env" ]]; then
+  set -a
+  source "$ROOT/.env"
+  set +a
+fi
+
 # ── Pre-flight ────────────────────────────────────────────────────────
 if [[ ! -f "$SEGMENTS" ]]; then
   echo "✗ $SEGMENTS not found. Run: npm run extract-narrations" >&2
