@@ -1,0 +1,398 @@
+[
+  {
+    "chapter": "coldopen",
+    "step": 1,
+    "text": "你遇到过这些尴尬吗？",
+    "audio": "coldopen/1.mp3"
+  },
+  {
+    "chapter": "coldopen",
+    "step": 2,
+    "text": "让 AI 做演示视频，出来的是传统幻灯片。逐页翻，像 PPT。",
+    "audio": "coldopen/2.mp3"
+  },
+  {
+    "chapter": "coldopen",
+    "step": 3,
+    "text": "或者画面全是纯文字，录出来没人想看。",
+    "audio": "coldopen/3.mp3"
+  },
+  {
+    "chapter": "coldopen",
+    "step": 4,
+    "text": "又或者想要一点电影感。结果紫粉渐变加圆角卡片加 emoji。",
+    "audio": "coldopen/4.mp3"
+  },
+  {
+    "chapter": "coldopen",
+    "step": 5,
+    "text": "核心就一个。怎么把文章变成像视频的网页，能看能录能发出去。",
+    "audio": "coldopen/5.mp3"
+  },
+  {
+    "chapter": "coldopen",
+    "step": 6,
+    "text": "今天聊 web-video-presentation，一个 Claude Code Skill。输入文章或口播稿，输出 16 比 9 的网页。每步独占整屏，点击推进一个节拍。",
+    "audio": "coldopen/6.mp3"
+  },
+  {
+    "chapter": "coldopen",
+    "step": 7,
+    "text": "它还带音频合成。auto 模式按空格就自动播完，一镜到底，不用后期对轨。",
+    "audio": "coldopen/7.mp3"
+  },
+  {
+    "chapter": "coldopen",
+    "step": 8,
+    "text": "适用场景：公众号转视频、产品演示、教程、路演 demo。",
+    "audio": "coldopen/8.mp3"
+  },
+  {
+    "chapter": "principles",
+    "step": 1,
+    "text": "它的核心不是模板，是十条原则加一套方法论。",
+    "audio": "principles/1.mp3"
+  },
+  {
+    "chapter": "principles",
+    "step": 2,
+    "text": "第一，16 比 9 固定舞台。1920 乘 1080 坐标系，transform scale 缩放。没有响应式。",
+    "audio": "principles/2.mp3"
+  },
+  {
+    "chapter": "principles",
+    "step": 3,
+    "text": "这就是视频，不是网页。",
+    "audio": "principles/3.mp3"
+  },
+  {
+    "chapter": "principles",
+    "step": 4,
+    "text": "第二，每步独占整屏。if step 等于 N，返回对应场景。",
+    "audio": "principles/4.mp3"
+  },
+  {
+    "chapter": "principles",
+    "step": 5,
+    "text": "简单到不可能出错。",
+    "audio": "principles/5.mp3"
+  },
+  {
+    "chapter": "principles",
+    "step": 6,
+    "text": "第三，内容驱动动画。先找内在动作。",
+    "audio": "principles/6.mp3"
+  },
+  {
+    "chapter": "principles",
+    "step": 7,
+    "text": "数字递增、排名交换。",
+    "audio": "principles/7.mp3"
+  },
+  {
+    "chapter": "principles",
+    "step": 8,
+    "text": "流程节点依次点亮。",
+    "audio": "principles/8.mp3"
+  },
+  {
+    "chapter": "principles",
+    "step": 9,
+    "text": "第四，口播节拍等于 step。稿子里用三个短横线切分一个想法。",
+    "audio": "principles/9.mp3"
+  },
+  {
+    "chapter": "principles",
+    "step": 10,
+    "text": "第五，隐藏 chrome。进度条默认透明，鼠标悬浮才出现。",
+    "audio": "principles/10.mp3"
+  },
+  {
+    "chapter": "principles",
+    "step": 11,
+    "text": "录屏时没有任何浏览器痕迹。",
+    "audio": "principles/11.mp3"
+  },
+  {
+    "chapter": "principles",
+    "step": 12,
+    "text": "找不到才用入场动画。这决定了你是视频还是翻 PPT。",
+    "audio": "principles/12.mp3"
+  },
+  {
+    "chapter": "dual-source",
+    "step": 1,
+    "text": "还有双源原则。每个章节有两个源。口播稿定节奏，原文定画面。",
+    "audio": "dual-source/1.mp3"
+  },
+  {
+    "chapter": "dual-source",
+    "step": 2,
+    "text": "口播稿定节奏，一句话对应一个 step。",
+    "audio": "dual-source/2.mp3"
+  },
+  {
+    "chapter": "dual-source",
+    "step": 3,
+    "text": "原文定画面密度。数字、引用、案例，都能用上。",
+    "audio": "dual-source/3.mp3"
+  },
+  {
+    "chapter": "dual-source",
+    "step": 4,
+    "text": "画面细节从原文里挖。具体数字、引用原话、案例维度。",
+    "audio": "dual-source/4.mp3"
+  },
+  {
+    "chapter": "dual-source",
+    "step": 5,
+    "text": "如果只用口播稿做画面。",
+    "audio": "dual-source/5.mp3"
+  },
+  {
+    "chapter": "dual-source",
+    "step": 6,
+    "text": "屏幕等于把口播打字打了一遍。那是 PPT，不是视频。",
+    "audio": "dual-source/6.mp3"
+  },
+  {
+    "chapter": "workflow",
+    "step": 1,
+    "text": "工作流是硬 Checkpoint。",
+    "audio": "workflow/1.mp3"
+  },
+  {
+    "chapter": "workflow",
+    "step": 2,
+    "text": "Phase 1，一次产出口播稿和开发计划。都要自检。",
+    "audio": "workflow/2.mp3"
+  },
+  {
+    "chapter": "workflow",
+    "step": 3,
+    "text": "改完才能进下一阶段。",
+    "audio": "workflow/3.mp3"
+  },
+  {
+    "chapter": "workflow",
+    "step": 4,
+    "text": "Checkpoint Plan 确认五件事：稿子、计划、主题、素材、模式。",
+    "audio": "workflow/4.mp3"
+  },
+  {
+    "chapter": "workflow",
+    "step": 5,
+    "text": "Phase 2，脚手架一键生成项目。",
+    "audio": "workflow/5.mp3"
+  },
+  {
+    "chapter": "workflow",
+    "step": 6,
+    "text": "第一章强制主线程加用户验收。",
+    "audio": "workflow/6.mp3"
+  },
+  {
+    "chapter": "workflow",
+    "step": 7,
+    "text": "之后可逐章确认，每章做完暂停验收。",
+    "audio": "workflow/7.mp3"
+  },
+  {
+    "chapter": "workflow",
+    "step": 8,
+    "text": "或者顺序开发、或者用 subagent 并行做。",
+    "audio": "workflow/8.mp3"
+  },
+  {
+    "chapter": "themes",
+    "step": 1,
+    "text": "主题系统二十三套独立 DNA。每套不是换颜色，是完整的设计签名。",
+    "audio": "themes/1.mp3"
+  },
+  {
+    "chapter": "themes",
+    "step": 2,
+    "text": "线条性格、圆角哲学、装饰签名、动效基线。",
+    "audio": "themes/2.mp3"
+  },
+  {
+    "chapter": "themes",
+    "step": 3,
+    "text": "Midnight Press，咖啡底加火热橙色，衬线字体。",
+    "audio": "themes/3.mp3"
+  },
+  {
+    "chapter": "themes",
+    "step": 4,
+    "text": "Newsroom，报纸奶油加墨黑衬线，零圆角。",
+    "audio": "themes/4.mp3"
+  },
+  {
+    "chapter": "themes",
+    "step": 5,
+    "text": "Terminal Green，纯黑加等宽字体加 CRT 扫描线。",
+    "audio": "themes/5.mp3"
+  },
+  {
+    "chapter": "themes",
+    "step": 6,
+    "text": "还有粉笔花园、包豪斯、双拼画布等等。",
+    "audio": "themes/6.mp3"
+  },
+  {
+    "chapter": "themes",
+    "step": 7,
+    "text": "每套 25 到 35 个 CSS token，覆盖所有视觉维度。",
+    "audio": "themes/7.mp3"
+  },
+  {
+    "chapter": "themes",
+    "step": 8,
+    "text": "切换就是一条 cp 命令，章节代码一行都不动。",
+    "audio": "themes/8.mp3"
+  },
+  {
+    "chapter": "anti-ai",
+    "step": 1,
+    "text": "反 AI 味是最硬的一刀。紫粉渐变、圆角卡片、emoji、假数据。明令禁止。",
+    "audio": "anti-ai/1.mp3"
+  },
+  {
+    "chapter": "anti-ai",
+    "step": 2,
+    "text": "紫粉渐变背景，圆角卡片加彩色边框。",
+    "audio": "anti-ai/2.mp3"
+  },
+  {
+    "chapter": "anti-ai",
+    "step": 3,
+    "text": "emoji 当图标、假数据、假 logo，都不行。",
+    "audio": "anti-ai/3.mp3"
+  },
+  {
+    "chapter": "anti-ai",
+    "step": 4,
+    "text": "没有就承认没有。比 fake 强一百倍。",
+    "audio": "anti-ai/4.mp3"
+  },
+  {
+    "chapter": "anti-ai",
+    "step": 5,
+    "text": "口播稿也要去 AI 味。假共情、假深刻、自我标榜。",
+    "audio": "anti-ai/5.mp3"
+  },
+  {
+    "chapter": "anti-ai",
+    "step": 6,
+    "text": "万能模板、排比堆砌，全部清干净。",
+    "audio": "anti-ai/6.mp3"
+  },
+  {
+    "chapter": "anti-ai",
+    "step": 7,
+    "text": "短句、第二人称、具体例子优先。",
+    "audio": "anti-ai/7.mp3"
+  },
+  {
+    "chapter": "anti-ai",
+    "step": 8,
+    "text": "标准只有一条：一个真人会这么说吗？",
+    "audio": "anti-ai/8.mp3"
+  },
+  {
+    "chapter": "tech-arch",
+    "step": 1,
+    "text": "技术架构三个设计。",
+    "audio": "tech-arch/1.mp3"
+  },
+  {
+    "chapter": "tech-arch",
+    "step": 2,
+    "text": "step 游标模型，useStepper 加 localStorage。",
+    "audio": "tech-arch/2.mp3"
+  },
+  {
+    "chapter": "tech-arch",
+    "step": 3,
+    "text": "没有 useEffect，全部 CSS keyframes 声明式完成。",
+    "audio": "tech-arch/3.mp3"
+  },
+  {
+    "chapter": "tech-arch",
+    "step": 4,
+    "text": "五处永远同步：口播稿、计划、代码、注册、音频。",
+    "audio": "tech-arch/4.mp3"
+  },
+  {
+    "chapter": "tech-arch",
+    "step": 5,
+    "text": "源头都是同一个 narrations.ts。",
+    "audio": "tech-arch/5.mp3"
+  },
+  {
+    "chapter": "tech-arch",
+    "step": 6,
+    "text": "Auto 模式，每段音频加两百毫秒缓冲。",
+    "audio": "tech-arch/6.mp3"
+  },
+  {
+    "chapter": "tech-arch",
+    "step": 7,
+    "text": "加个参数就能全自动播放。",
+    "audio": "tech-arch/7.mp3"
+  },
+  {
+    "chapter": "tech-arch",
+    "step": 8,
+    "text": "动画比口播长会被直接切断。倒逼节奏对齐。",
+    "audio": "tech-arch/8.mp3"
+  },
+  {
+    "chapter": "tech-arch",
+    "step": 9,
+    "text": "Provider-agnostic 音频，每个后端一个脚本，三函数契约。",
+    "audio": "tech-arch/9.mp3"
+  },
+  {
+    "chapter": "tech-arch",
+    "step": 10,
+    "text": "内置 Minimax、OpenAI、小米 MiMo。想换照着改就行。",
+    "audio": "tech-arch/10.mp3"
+  },
+  {
+    "chapter": "ending",
+    "step": 1,
+    "text": "四点心得。",
+    "audio": "ending/1.mp3"
+  },
+  {
+    "chapter": "ending",
+    "step": 2,
+    "text": "Checkpoint 设计比提示词重要。",
+    "audio": "ending/2.mp3"
+  },
+  {
+    "chapter": "ending",
+    "step": 3,
+    "text": "先定原则再写代码。",
+    "audio": "ending/3.mp3"
+  },
+  {
+    "chapter": "ending",
+    "step": 4,
+    "text": "去 AI 味不是降质。",
+    "audio": "ending/4.mp3"
+  },
+  {
+    "chapter": "ending",
+    "step": 5,
+    "text": "主题系统换的是签名，不是颜色。",
+    "audio": "ending/5.mp3"
+  },
+  {
+    "chapter": "ending",
+    "step": 6,
+    "text": "项目开源，去 GitHub 搜 web-video-presentation。下期见。",
+    "audio": "ending/6.mp3"
+  }
+]

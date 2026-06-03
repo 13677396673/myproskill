@@ -1,0 +1,26 @@
+/* ─── Ending chapter (en- prefix) ─── */
+.en-scene { color: var(--text); }
+.en-accent { color: var(--accent); }
+.en-center-scene { position: absolute; inset: 0; }
+.en-center-layout {
+  height: 100%; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+  gap: var(--space-3); padding: var(--stage-pad-y) var(--stage-pad-x);
+}
+
+/* step 0 */
+.en-cover-body {
+  flex: 1; display: flex; flex-direction: column;
+  justify-content: center; gap: var(--space-5);
+}
+.en-cover-h { font-size: var(--t-display-2); line-height: 1.08; margin: 0; }
+
+/* steps 1-4: numbered points */
+.en-num-wrap { margin-bottom: var(--space-4); }
+.en-num { font-size: 64px; line-height: 1; color: var(--accent); }
+.en-point-h { font-size: var(--t-display-2); line-height: 1.1; margin: 0; }
+.en-point-sub { font-size: var(--t-h2); color: var(--text-mute); margin-top: var(--space-5); }
+
+/* step 5: final */
+.en-final-h { font-size: var(--t-display-2); line-height: 1.08; margin: 0; }
+.en-final-sub { font-size: var(--t-h2); color: var(--text-mute); margin-top: var(--space-5); }

@@ -1,0 +1,46 @@
+/* ─── Anti-AI chapter (ai- prefix) ─── */
+.ai-scene { color: var(--text); }
+.ai-accent { color: var(--accent); }
+.ai-center-scene { position: absolute; inset: 0; }
+.ai-center-layout {
+  height: 100%; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+  gap: var(--space-3); padding: var(--stage-pad-y) var(--stage-pad-x);
+}
+
+/* step 0 */
+.ai-cover-body {
+  flex: 1; display: flex; flex-direction: column;
+  justify-content: center; gap: var(--space-5);
+}
+.ai-cover-h { font-size: var(--t-display-2); line-height: 1.05; margin: 0; }
+
+/* step 1: bad grid */
+.ai-bad-grid { display: flex; gap: var(--space-5); }
+.ai-bad-item {
+  width: 180px; height: 120px; display: grid;
+  place-items: center; opacity: 0.6;
+}
+.ai-bad-label { font-size: 10px; color: var(--text-mute); }
+
+/* step 2: chips */
+.ai-bad-inline { display: flex; gap: var(--space-5); }
+.ai-bad-chip {
+  font-family: var(--font-mono); font-size: 14px;
+  padding: 8px 16px; border: var(--rule-w) solid var(--rule);
+  border-radius: var(--r-sm); color: var(--text-faint);
+}
+
+/* step 3: rule */
+.ai-rule-h { font-size: var(--t-display-2); line-height: 1.1; margin: 0; }
+.ai-rule-sub { font-size: var(--t-h2); color: var(--text-mute); margin-top: var(--space-5); }
+
+/* steps 4-6: lists */
+.ai-fault-list, .ai-clean-list {
+  display: flex; flex-direction: column; gap: var(--space-5);
+}
+.ai-fault-item { font-family: var(--font-mono); font-size: var(--t-h1); color: var(--text-2); }
+.ai-clean-item { font-size: var(--t-h1); color: var(--text); }
+
+/* step 7 */
+.ai-final-h { font-size: var(--t-display-2); line-height: 1.12; margin: 0; }

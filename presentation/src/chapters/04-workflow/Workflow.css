@@ -1,0 +1,83 @@
+/* ─── Workflow chapter (wf- prefix) ─── */
+.wf-scene { color: var(--text); }
+.wf-accent { color: var(--accent); }
+.wf-center-scene { position: absolute; inset: 0; }
+.wf-center-layout {
+  height: 100%; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+  gap: var(--space-3); padding: var(--stage-pad-y) var(--stage-pad-x);
+}
+.wf-phase-hdr { display: flex; align-items: baseline; gap: var(--space-5); }
+.wf-phase-num { font-size: 42px; line-height: 1; }
+
+/* step 0 */
+.wf-cover-body {
+  flex: 1; display: flex; flex-direction: column;
+  justify-content: center; gap: var(--space-5);
+}
+.wf-cover-h { font-size: var(--t-display-2); line-height: 1.05; margin: 0; }
+
+/* shared demo */
+.wf-demo {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: var(--space-7);
+}
+.wf-caption { font-size: var(--t-h2); color: var(--text-mute); }
+
+/* step 1: outputs */
+.wf-outputs { display: flex; gap: var(--space-9); }
+.wf-file { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
+.wf-file-icon { }
+.wf-file-box {
+  display: inline-block;
+  width: 32px; height: 40px;
+  background: var(--surface);
+  border: 2px solid var(--rule);
+  border-radius: 3px;
+  position: relative;
+}
+.wf-file-box::after {
+  content: "";
+  position: absolute;
+  top: 8px; left: 5px; right: 5px;
+  height: 2px;
+  background: var(--text-faint);
+  box-shadow: 0 7px 0 var(--text-faint), 0 14px 0 var(--text-faint);
+}
+.wf-file-name { font-size: 11px; color: var(--accent); }
+.wf-file-desc { font-size: var(--t-h2); }
+
+/* steps 2, 5: feature */
+.wf-feature-h { font-size: var(--t-display-2); line-height: 1.1; margin: 0; }
+.wf-feature-sub { font-size: var(--t-h2); color: var(--text-mute); margin-top: var(--space-5); }
+
+/* step 3: checklist */
+.wf-checklist { display: flex; gap: var(--space-5); }
+.wf-check-item {
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-3);
+  font-family: var(--font-display-cn); font-size: var(--t-h2);
+}
+.wf-check-bullet {
+  width: 12px; height: 12px; border-radius: 50%; background: var(--accent);
+}
+
+/* step 4: code icon */
+.wf-code-icon {
+  display: flex; flex-direction: column; gap: 6px; padding: var(--space-5);
+  background: var(--surface-2); border: var(--rule-w) solid var(--rule);
+  border-radius: var(--r-sm);
+}
+.wf-code-line-small { height: 6px; width: 80px; background: var(--text-faint); border-radius: 2px; }
+.wf-cl-short { width: 50px; }
+
+/* step 6: modes */
+.wf-modes { display: flex; align-items: center; gap: var(--space-5); }
+.wf-mode {
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-3);
+  padding: var(--space-4); border: var(--rule-w) solid var(--rule);
+  border-radius: var(--r-sm); opacity: 0.4;
+}
+.wf-mode-active { border-color: var(--accent); opacity: 1; }
+.wf-mode-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--text-mute); }
+.wf-mode-active .wf-mode-dot { background: var(--accent); }
+.wf-mode-arrow { font-size: 24px; color: var(--text-faint); }

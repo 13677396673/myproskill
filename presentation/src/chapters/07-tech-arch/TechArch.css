@@ -1,0 +1,80 @@
+/* ─── Tech Arch chapter (ta- prefix) ─── */
+.ta-scene { color: var(--text); }
+.ta-accent { color: var(--accent); }
+.ta-center-scene { position: absolute; inset: 0; }
+.ta-center-layout {
+  height: 100%; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+  gap: var(--space-3); padding: var(--stage-pad-y) var(--stage-pad-x);
+}
+.ta-hdr { display: flex; align-items: baseline; gap: var(--space-5); }
+.ta-hdr-num { font-size: 42px; line-height: 1; }
+
+/* step 0 */
+.ta-cover-body {
+  flex: 1; display: flex; flex-direction: column;
+  justify-content: center; gap: var(--space-5);
+}
+.ta-cover-h { font-size: var(--t-display-2); line-height: 1.05; margin: 0; }
+.ta-teasers { display: flex; gap: var(--space-5); margin-top: var(--space-4); }
+.ta-teaser {
+  font-family: var(--font-mono); font-size: 13px;
+  padding: 4px 12px; border: var(--rule-w) solid var(--rule);
+  border-radius: var(--r-sm); color: var(--text-mute);
+}
+
+/* shared demo */
+.ta-demo {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: var(--space-7);
+}
+.ta-caption { font-size: var(--t-h2); color: var(--text-mute); }
+
+/* step 1: cursor */
+.ta-cursor-flow { display: flex; align-items: center; gap: var(--space-4); }
+.ta-cursor-item {
+  padding: var(--space-4) var(--space-5);
+  border: var(--rule-w) solid var(--rule); border-radius: var(--r-sm);
+  background: var(--surface-2); opacity: 0.4;
+}
+.ta-cursor-active { border-color: var(--accent); opacity: 1; }
+.ta-cursor-step { font-family: var(--font-mono); font-size: 14px; color: var(--text); }
+.ta-cursor-arrow { font-size: 20px; color: var(--text-faint); }
+
+/* steps 2, 6-7, 9 */
+.ta-feat-h { font-size: var(--t-display-2); line-height: 1.1; margin: 0; }
+.ta-feat-sub { font-size: var(--t-h2); color: var(--text-mute); margin-top: var(--space-5); }
+
+/* step 3: sync */
+.ta-sync-list { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
+.ta-sync-item {
+  padding: var(--space-3) var(--space-5);
+  border: var(--rule-w) solid var(--rule); border-radius: var(--r-sm);
+  background: var(--surface-2); font-size: 11px; min-width: 120px;
+}
+.ta-sync-arrow { font-family: var(--font-display-en); font-size: 14px; color: var(--text-faint); }
+
+/* step 4: source */
+.ta-source-block {
+  background: var(--surface-2); border: var(--rule-w) solid var(--accent);
+  border-radius: var(--r-sm); padding: var(--space-5) var(--space-7);
+  margin-bottom: var(--space-5);
+}
+.ta-source-file { font-family: var(--font-mono); font-size: 20px; color: var(--accent); }
+.ta-source-sub { font-size: var(--t-h2); color: var(--text-mute); }
+
+/* step 5: auto */
+.ta-auto-visual { display: flex; flex-direction: column; align-items: center; gap: var(--space-5); }
+.ta-auto-segments { display: flex; gap: 6px; width: 320px; }
+.ta-auto-seg { flex: 1; height: 5px; background: var(--rule); border-radius: 3px; }
+.ta-auto-seg-active { background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+.ta-auto-info { font-size: 10px; color: var(--text-mute); }
+
+/* step 8: providers */
+.ta-providers { display: flex; gap: var(--space-5); }
+.ta-provider {
+  padding: var(--space-5) var(--space-7);
+  background: var(--surface-2); border: var(--rule-w) solid var(--rule);
+  border-radius: var(--r-sm);
+}
+.ta-provider-name { font-size: 12px; }

@@ -1,0 +1,379 @@
+/* ─── Principles chapter (pr- prefix) ─── */
+
+.pr-scene { color: var(--text); }
+.pr-accent { color: var(--accent); }
+
+/* shared header for numbered principles */
+.pr-principle-hdr {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-5);
+}
+.pr-principle-num {
+  font-size: 48px;
+  line-height: 1;
+}
+
+/* ─── step 0: cover ─── */
+.pr-cover-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-5);
+}
+.pr-cover-h {
+  font-size: var(--t-display-2);
+  line-height: 1.05;
+  margin: 0;
+}
+.pr-cover-sub {
+  font-size: var(--t-h2);
+  color: var(--text-mute);
+}
+
+/* ─── shared demo area ─── */
+.pr-demo-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-7);
+}
+
+/* ─── step 1: 16:9 frame demo ─── */
+.pr-frame {
+  width: 480px;
+  height: 270px;
+  border: 2px solid var(--accent);
+  border-radius: var(--r-sm);
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+.pr-frame::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border: 1px dashed var(--rule);
+  border-radius: var(--r-sm);
+  pointer-events: none;
+}
+.pr-frame-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.pr-frame-dim {
+  font-size: 56px;
+}
+.pr-frame-x {
+  font-size: 32px;
+  color: var(--text-mute);
+}
+
+/* ─── step 2: scale demo ─── */
+.pr-scale-demo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-7);
+}
+.pr-scale-source {
+  width: 180px;
+  height: 102px;
+  border: 2px solid var(--accent);
+  border-radius: var(--r-xs);
+  display: grid;
+  place-items: center;
+}
+.pr-scale-inner {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-mute);
+}
+.pr-scale-target {
+  width: 120px;
+  height: 68px;
+  border: 2px solid var(--rule);
+  border-radius: var(--r-xs);
+  display: grid;
+  place-items: center;
+}
+.pr-scale-shrunk {
+  font-size: 9px;
+}
+.pr-scale-arrow {
+  font-size: 36px;
+  color: var(--accent);
+}
+.pr-caption {
+  font-size: var(--t-body);
+  color: var(--text-mute);
+}
+
+/* comparison label badges */
+.pr-label-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 2px;
+  line-height: 1.4;
+}
+.pr-label-wrong {
+  background: var(--surface-3);
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+.pr-label-right {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* ─── step 3: code block ─── */
+.pr-code-block {
+  background: var(--surface-2);
+  border: var(--rule-w) solid var(--rule);
+  border-radius: var(--r-sm);
+  padding: var(--space-7) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 400px;
+}
+.pr-code-line {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.pr-code-indent { padding-left: 2em; }
+.pr-code-kw { color: var(--accent); }
+.pr-code-var { color: var(--text-2); }
+.pr-code-num { color: var(--accent); }
+.pr-code-tag { color: var(--accent); opacity: 0.8; }
+
+/* ─── step 4: simplicity ─── */
+.pr-center-scene { position: absolute; inset: 0; }
+.pr-center-layout {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-3);
+  padding: var(--stage-pad-y) var(--stage-pad-x);
+}
+.pr-simple-h {
+  font-size: var(--t-display-2);
+  line-height: 1.1;
+  margin: 0;
+}
+.pr-simple-sub {
+  font-size: var(--t-h2);
+  color: var(--text-mute);
+  margin-top: var(--space-5);
+}
+
+/* ─── step 5: comparison ─── */
+.pr-compare {
+  display: flex;
+  align-items: center;
+  gap: var(--space-7);
+}
+.pr-compare-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+}
+.pr-compare-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+.pr-compare-wrong { opacity: 0.5; }
+.pr-compare-right { opacity: 1; }
+.pr-compare-boxes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.pr-compare-box {
+  width: 160px;
+  height: 24px;
+  background: var(--surface-3);
+  border-radius: var(--r-xs);
+}
+.pr-compare-vs {
+  font-size: 28px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.pr-compare-bar {
+  width: 160px;
+  border-radius: var(--r-xs);
+}
+.pr-bar-growth {
+  height: 80px;
+  background: linear-gradient(
+    to top,
+    var(--accent) 0%,
+    var(--accent) 60%,
+    var(--accent-soft) 100%
+  );
+  border-radius: var(--r-xs);
+}
+.pr-compare-desc {
+  font-size: var(--t-body);
+  color: var(--text-mute);
+}
+
+/* ─── step 6: counter ─── */
+.pr-counter-demo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-7);
+}
+.pr-counter-num {
+  font-size: 140px;
+  line-height: 0.85;
+}
+.pr-counter-arrow {
+  font-size: 64px;
+  font-weight: 700;
+}
+.pr-counter-num-next { color: var(--accent); }
+.pr-counter-label {
+  font-size: var(--t-h2);
+  color: var(--text-mute);
+  margin-top: var(--space-5);
+}
+
+/* ─── step 7: flow ─── */
+.pr-flow-demo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.pr-flow-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+.pr-flow-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.pr-dot-inactive {
+  background: var(--rule);
+}
+.pr-flow-line {
+  width: 48px;
+  height: 2px;
+  background: var(--accent);
+  margin-bottom: var(--space-7);
+}
+.pr-line-dim {
+  background: var(--rule);
+}
+.pr-flow-label {
+  font-size: var(--t-h2);
+}
+
+/* ─── step 8: pace ─── */
+.pr-pace-demo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+.pr-pace-segment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+.pr-pace-text {
+  font-size: var(--t-h2);
+  color: var(--text);
+}
+.pr-pace-mark {
+  font-size: 11px;
+  color: var(--accent);
+}
+.pr-pace-divider {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  color: var(--text-faint);
+  letter-spacing: 0.15em;
+}
+
+/* ─── step 9: chrome ─── */
+.pr-chrome-demo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-7);
+}
+.pr-chrome-stage {
+  position: relative;
+  width: 480px;
+  height: 270px;
+  background: var(--surface-2);
+  border: var(--rule-w) solid var(--rule);
+  border-radius: var(--r-sm);
+  display: grid;
+  place-items: center;
+}
+.pr-chrome-content {
+  font-size: var(--t-h2);
+  color: var(--text-mute);
+}
+.pr-chrome-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--rule);
+  opacity: 0.3;
+}
+.pr-chrome-progress {
+  width: 30%;
+  height: 100%;
+  background: var(--accent);
+}
+.pr-chrome-label {
+  color: var(--text-mute);
+}
+
+/* ─── step 10: clean recording ─── */
+.pr-clean-h {
+  font-size: var(--t-display-2);
+  line-height: 1.1;
+  margin: 0;
+}
+.pr-clean-sub {
+  font-size: var(--t-h2);
+  color: var(--text-mute);
+  margin-top: var(--space-5);
+}
+
+/* ─── step 11: summary ─── */
+.pr-summary-h {
+  font-size: var(--t-display-2);
+  line-height: 1.15;
+  margin: 0;
+}
+.pr-summary-sub {
+  font-size: var(--t-h2);
+  color: var(--text-mute);
+  margin-top: var(--space-5);
+}

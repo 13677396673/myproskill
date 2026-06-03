@@ -1,0 +1,62 @@
+/* ─── Themes chapter (th- prefix) ─── */
+.th-scene { color: var(--text); }
+.th-accent { color: var(--accent); }
+.th-center-scene { position: absolute; inset: 0; }
+.th-center-layout {
+  height: 100%; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+  gap: var(--space-3); padding: var(--stage-pad-y) var(--stage-pad-x);
+}
+.th-theme-hdr { display: flex; align-items: baseline; gap: var(--space-5); }
+.th-theme-num { font-size: 42px; line-height: 1; }
+
+/* step 0 */
+.th-cover-body {
+  flex: 1; display: flex; flex-direction: column;
+  justify-content: center; gap: var(--space-5);
+}
+.th-cover-h { font-size: var(--t-display-2); line-height: 1.08; margin: 0; }
+
+/* step 1: signature */
+.th-sig-grid { display: flex; gap: var(--space-7); margin-top: var(--space-5); }
+.th-sig-item { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); }
+.th-sig-icon { width: 48px; height: 48px; }
+.th-sig-label { font-size: var(--t-h2); }
+
+/* steps 2-4: preview cards */
+.th-demo {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+}
+.th-preview {
+  width: 440px; height: 220px; border-radius: var(--r-card);
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: var(--space-4); text-align: center;
+}
+.th-preview-dark { background: #1a1714; color: #f5f0e5; }
+.th-preview-light { background: #f5f3ee; color: #1a1a1a; border: var(--rule-w) solid var(--rule); }
+.th-preview-terminal { background: #0a0f0a; color: #d3f0d3; }
+.th-preview-label { font-size: var(--t-h1); }
+.th-preview-terminal-text { font-family: var(--font-mono); font-size: var(--t-h1); }
+.th-preview-sub { margin-top: var(--space-3); font-size: 11px; }
+
+/* step 5: more */
+.th-more-list { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-4); max-width: 500px; }
+.th-more-tag {
+  font-family: var(--font-mono); font-size: 14px; padding: 6px 14px;
+  border: var(--rule-w) solid var(--rule); border-radius: var(--r-sm);
+  color: var(--text-2);
+}
+
+/* step 6: tokens */
+.th-token-h { margin: 0; }
+.th-token-num { font-size: 120px; line-height: 0.85; color: var(--accent); }
+.th-token-sub { font-size: var(--t-h2); color: var(--text-mute); margin-top: var(--space-5); }
+
+/* step 7: switch */
+.th-switch-demo {
+  background: var(--surface-2); border: var(--rule-w) solid var(--rule);
+  border-radius: var(--r-sm); padding: var(--space-5) var(--space-7);
+  margin-bottom: var(--space-5);
+}
+.th-switch-cmd { font-family: var(--font-mono); font-size: 16px; color: var(--accent); }
+.th-switch-sub { font-size: var(--t-h2); color: var(--text-mute); }
